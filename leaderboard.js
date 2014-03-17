@@ -1,12 +1,12 @@
 // Set up a collection to contain player information. On the server,
-// it is backed by a MongoDB collection named "players."
+// it is backed by a MongoDB collection named "players".
 
 Players = new Meteor.Collection("players");
 Messages = new Meteor.Collection("messages");
 
-if (Meteor.is_client) {
+if (Meteor.isClient) {
   Template.leaderboard.players = function () {
-    return Players.find({});
+    return Players.find({}, {sort: {score: -1, name: 1}});
   };
 
   Template.leaderboard.selected_name = function () {
@@ -36,6 +36,7 @@ if (Meteor.is_client) {
 
   Template.chat.events({
     'click input.write': function () {
+      console.log('click');
       Messages.insert({
         name: $("#chat_name").val(),
         msg: $("#chat_msg").val()
@@ -45,7 +46,7 @@ if (Meteor.is_client) {
 }
 
 // On server startup, create some players if the database is empty.
-if (Meteor.is_server) {
+if (Meteor.isServer) {
   Meteor.startup(function () {
     if (Players.find().count() === 0) {
       var names = ["Ada Lovelace",
@@ -55,7 +56,7 @@ if (Meteor.is_server) {
                    "Nikola Tesla",
                    "Claude Shannon"];
       for (var i = 0; i < names.length; i++)
-        Players.insert({name: names[i], score: Math.floor(Math.random()*10)*5});
+        Players.insert({name: names[i], score: Math.floor(Random.fraction()*10)*5});
       Messages.insert({name: "first", msg: "message"});
     }
   });
