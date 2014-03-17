@@ -1,0 +1,48 @@
+<head>
+  <title>Game</title>
+</head>
+
+<body>
+  <div id="outer">
+    {{> chat}}
+  </div>
+</body>
+
+<template name="chat">
+  <p>
+    {{#each players}}
+      {{> player}}
+    {{/each}}
+  </p>
+  <p>
+    {{#each messages}}
+      {{> message}}
+    {{/each}}
+  </p>
+  <p>
+    {{#if me}}
+      message: <input type="text" id="chat_msg" value="" />
+      <input type="button" id="send" value="Send" />
+      {{#if me.ready}}
+      {{else}}
+        <input type="button" id="ready" value="Ready" />
+      {{/if}}
+    {{else}}
+      name: <input type="text" id="name" value="your name" />
+      <input type="button" id="enter" value="Enter" />
+    {{/if}}
+    <input type="button" id="clear" value="Clear" />
+  </p>
+</template>
+
+<template name="player">
+  <div class="player">
+    <span class="name">{{name}}</span>
+    <span class="ready">{{ready}}</span>
+  </div>
+</template>
+
+<template name="message">
+  {{name}} : {{msg}}
+  <br />
+</template>
